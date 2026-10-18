@@ -30,12 +30,15 @@ header{position:sticky;top:0;z-index:10;background:rgba(10,14,26,.92);backdrop-f
 header .wrap{display:flex;align-items:center;justify-content:space-between;height:76px}
 header img{width:56px;height:56px}
 nav{display:flex;gap:26px;font-size:14px}
-nav a{text-decoration:none;opacity:.85}
+nav a{text-decoration:none;opacity:.85;padding:12px 4px;display:inline-block}
 nav a:hover{opacity:1;text-decoration:underline}
 
 /* hero */
-.hero{position:relative;min-height:620px;display:flex;align-items:center;justify-content:center;text-align:center;padding:40px 20px;overflow:hidden}
-.hero .bg{position:absolute;inset:24px;border-radius:28px;background:url(img/hero-earth.jpg) center 70%/cover;filter:saturate(1.05)}
+.hero{position:relative;min-height:min(620px,92vh);display:flex;align-items:center;justify-content:center;text-align:center;padding:40px 20px;overflow:hidden}
+.hero .bg{position:absolute;inset:24px;border-radius:28px;background:url(img/hero-earth.jpg) center 70%/cover;filter:saturate(1.05);animation:drift 40s ease-in-out infinite alternate}
+@keyframes drift{from{background-position:45% 72%;transform:scale(1)}to{background-position:55% 66%;transform:scale(1.04)}}
+.hero{overflow:hidden}
+.hero .bg{transform-origin:center}
 .hero .bg:after{content:"";position:absolute;inset:0;border-radius:28px;background:linear-gradient(180deg,rgba(10,14,26,.45),rgba(10,14,26,.15) 45%,rgba(10,14,26,.6))}
 .hero .in{position:relative;max-width:640px}
 .hero h1{font-size:clamp(56px,7vw,88px);letter-spacing:.02em}
@@ -105,6 +108,32 @@ nav a:hover{opacity:1;text-decoration:underline}
 footer{border-top:1px solid #ffffff12;padding:34px 0 48px}
 footer p{font-size:14px;color:var(--muted)}
 
+
+/* animations */
+.pulse{display:block;width:min(520px,90%);height:64px;margin:6px auto 0;overflow:visible}
+.pulse path{fill:none;stroke:var(--red);stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1200;stroke-dashoffset:1200;animation:draw 1.6s .3s cubic-bezier(.6,0,.2,1) forwards,beat 2.4s 2.2s ease-in-out infinite}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes beat{0%,100%{opacity:1}50%{opacity:.55}}
+.hero h1{opacity:0;transform:translateY(14px);animation:rise .9s .1s cubic-bezier(.2,.7,.2,1) forwards}
+.hero p,.hero .btn{opacity:0;animation:fade .8s 1.4s forwards}
+.hero .btn{animation-delay:1.7s}
+@keyframes rise{to{opacity:1;transform:none}}
+@keyframes fade{to{opacity:1}}
+.step{transition:border-color .35s,box-shadow .35s,transform .35s}
+.step.lit{border-color:var(--red);box-shadow:0 0 0 1px var(--red),0 0 28px rgba(231,51,55,.35);transform:translateY(-4px)}
+.step.hot{border-color:#2a3350}
+.steps.done .step.hot{border-color:var(--red)}
+.btn{transition:background .2s,transform .2s}
+.btn:hover{transform:translateY(-2px)}
+.dl a{transition:border-color .2s,transform .2s}
+.dl a:hover{transform:translateY(-3px)}
+@media (prefers-reduced-motion:reduce){
+  *,*:before,*:after{animation:none!important;transition:none!important}
+  .hero h1,.hero p,.hero .btn{opacity:1;transform:none}
+  .pulse path{stroke-dashoffset:0}
+  .step.hot{border-color:var(--red)}
+}
+
 @media (max-width:860px){
   section{padding:68px 0}
   .split,.duo,.shots{grid-template-columns:1fr}
@@ -116,7 +145,7 @@ footer p{font-size:14px;color:var(--muted)}
   nav{gap:16px}
   nav a.opt{display:none}
 }
-@media (max-width:520px){.grid3,.steps,.steps .row2{grid-template-columns:1fr}}
+@media (max-width:520px){.grid3,.steps,.steps .row2,.specs .row{grid-template-columns:1fr}.stats .row{grid-template-columns:1fr 1fr;gap:28px 12px}}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 </style>
 </head>
@@ -139,6 +168,7 @@ footer p{font-size:14px;color:var(--muted)}
     <div class="bg" role="img" aria-label="Earth seen from orbit"></div>
     <div class="in">
       <h1>VITALS</h1>
+      <svg class="pulse" viewBox="0 0 520 64" aria-hidden="true"><path d="M0 34 H170 L190 34 L204 8 L222 58 L238 20 L252 40 L262 34 H520"/></svg>
       <p>When the doctor is 20 minutes away, the crew still needs an answer now. An onboard medical assistant for astronauts on long-duration Moon and Mars missions.</p>
       <a class="btn" href="#problem">Learn more</a>
     </div>
@@ -211,10 +241,10 @@ footer p{font-size:14px;color:var(--muted)}
     <div class="wrap">
       <h2>Where It Stands</h2>
       <div class="row">
-        <div class="stat"><div class="v">35</div><div class="l">Spaceflight conditions</div></div>
-        <div class="stat"><div class="v">262</div><div class="l">Automated tests passed</div></div>
-        <div class="stat"><div class="v">18/19</div><div class="l">Must-escalate complaints</div></div>
-        <div class="stat"><div class="v">6/6</div><div class="l">Basic missions passed</div></div>
+        <div class="stat"><div class="v" data-n="35">35</div><div class="l">Spaceflight conditions</div></div>
+        <div class="stat"><div class="v" data-n="262">262</div><div class="l">Automated tests passed</div></div>
+        <div class="stat"><div class="v" data-n="18" data-suf="/19">18/19</div><div class="l">Must-escalate complaints</div></div>
+        <div class="stat"><div class="v" data-n="6" data-suf="/6">6/6</div><div class="l">Basic missions passed</div></div>
       </div>
     </div>
   </section>
@@ -262,5 +292,25 @@ footer p{font-size:14px;color:var(--muted)}
 <footer>
   <div class="wrap"><p>VITALS is a student prototype for diagnosis and decision support — a doctor has the final say. Not a medical device.</p></div>
 </footer>
+
+<script>
+(()=>{
+  const still=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(still||!('IntersectionObserver' in window))return;
+  // steps light up in order, like a signal passing through
+  const steps=[...document.querySelectorAll('.step')], box=document.querySelector('.steps');
+  const run=()=>{steps.forEach((el,i)=>{setTimeout(()=>{el.classList.add('lit');setTimeout(()=>el.classList.remove('lit'),650)},i*320)});
+    setTimeout(()=>box.classList.add('done'),steps.length*320+300)};
+  new IntersectionObserver((es,o)=>{es.forEach(e=>{if(e.isIntersecting){run();o.disconnect()}})},{threshold:.45}).observe(box);
+  // numbers count up
+  const nums=[...document.querySelectorAll('[data-n]')];
+  nums.forEach(el=>el.textContent='0'+(el.dataset.suf||''));
+  new IntersectionObserver((es,o)=>{es.forEach(e=>{if(!e.isIntersecting)return;o.disconnect();
+    const t0=performance.now(),d=1200;
+    const tick=t=>{const k=Math.min(1,(t-t0)/d),ease=1-Math.pow(1-k,3);
+      nums.forEach(el=>el.textContent=Math.round(+el.dataset.n*ease)+(el.dataset.suf||''));
+      if(k<1)requestAnimationFrame(tick)};requestAnimationFrame(tick)})},{threshold:.5}).observe(document.querySelector('.stats'));
+})();
+</script>
 </body>
 </html>
