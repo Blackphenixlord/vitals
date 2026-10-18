@@ -2,7 +2,7 @@
 
 The public website for **VITALS** — Team TETHER, NASA HUNCH 2026–27, South Texas ISD Science Academy.
 
-Live: https://blackphenixlord.github.io/vitals/
+Live: https://jc-portfolio.codes/vitals/
 
 A plain HTML copy of the Wix site (https://joshuacollado636.wixsite.com/vitals), plus the PDR print files:
 
